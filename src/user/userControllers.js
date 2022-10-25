@@ -20,6 +20,42 @@ exports.readUsers = async (req, res) => {
         res.status(500).send({error: error.message})
     }
 }
+
+exports.updateUser = async (req, res) => {
+    try {
+        await User.updateOne(
+            {username: req.body.username},
+            {[req.body.key]: req.body.value}
+        );
+        res.status(200).send({message: "successfully update a user"})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error: error.message})
+    }
+
+}
+
+exports.deleteUser = async (req, res) => {
+    console.log(req.params)
+    try {
+        await User.deleteOne({username: req.params.username});
+        res.status(200).send({message: "successfully deleted a user"})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error: error.message})
+    }
+}
+
+exports.loginUser = async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.username, req.body.password)
+        res.status(200).send({user: user.username })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error: error.message})
+    }
+}
 // TODO: add updateUser and deleteUser controllers here
 
 
